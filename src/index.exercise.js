@@ -38,6 +38,40 @@ function App() {
       </Dialog>
     )
   }
+  function handleSubmit(formData) {
+    console.log('login', formData)
+  }
+
+  function LoginForm({submitHandler}) {
+    return (
+      <div>
+        <form
+          onSubmit={event => {
+            event.preventDefault()
+
+            const {username, password} = event.target
+
+            submitHandler({
+              username: username.value,
+              password: password.value,
+            })
+          }}
+        >
+          <div>
+            <label htmlFor="username">Username</label>
+            <input type="text" name="username"></input>
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input type="password" name="password"></input>
+          </div>
+          <div>
+            <input type="submit" value="Login"></input>
+          </div>
+        </form>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -45,6 +79,7 @@ function App() {
       <h1>Bookshelf</h1>
       <MyDialog name="login">
         <h3>Login</h3>
+        <LoginForm submitHandler={handleSubmit}></LoginForm>
       </MyDialog>
       <MyDialog name="register">
         <h3>Register</h3>
