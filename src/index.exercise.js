@@ -13,15 +13,7 @@ import '@reach/dialog/styles.css'
 function App() {
   const [activeDialog, setActiveDialog] = React.useState(null)
 
-  function handleLoginClick(event) {
-    setActiveDialog('login')
-  }
-
-  function handleRegisterClick(event) {
-    setActiveDialog('register')
-  }
-
-  function MyDialog({name, children}) {
+  function BookshelfDialog({name, children}) {
     function closeDialog() {
       setActiveDialog(null)
     }
@@ -80,26 +72,26 @@ function App() {
     <>
       <Logo height="80" width="80"></Logo>
       <h1>Bookshelf</h1>
-      <MyDialog name="login">
+      <BookshelfDialog name="login">
         <h3>Login</h3>
         <CredentialsForm
           submitHandler={handleLogin}
           buttonText="Login"
         ></CredentialsForm>
-      </MyDialog>
-      <MyDialog name="register">
+      </BookshelfDialog>
+      <BookshelfDialog name="register">
         <h3>Register</h3>
         <CredentialsForm
           submitHandler={handleRegister}
           buttonText="Login"
         ></CredentialsForm>
-      </MyDialog>
+      </BookshelfDialog>
 
       <div>
-        <button onClick={handleLoginClick}>Login</button>
+        <button onClick={() => setActiveDialog('login')}>Login</button>
       </div>
       <div>
-        <button onClick={handleRegisterClick}>Register</button>
+        <button onClick={() => setActiveDialog('register')}>Register</button>
       </div>
     </>
   )
