@@ -37,21 +37,21 @@ function App() {
     console.log('register', formData)
   }
 
-  function CredentialsForm({submitHandler, buttonText}) {
+  function CredentialsForm({submitHandler: externalSubmitHandler, buttonText}) {
+    function internalSubmitHandler(event) {
+      event.preventDefault()
+
+      const {username, password} = event.target
+
+      externalSubmitHandler({
+        username: username.value,
+        password: password.value,
+      })
+    }
+
     return (
       <div>
-        <form
-          onSubmit={event => {
-            event.preventDefault()
-
-            const {username, password} = event.target
-
-            submitHandler({
-              username: username.value,
-              password: password.value,
-            })
-          }}
-        >
+        <form onSubmit={internalSubmitHandler}>
           <div>
             <label htmlFor="username">Username</label>
             <input type="text" id="username"></input>
