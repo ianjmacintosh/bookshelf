@@ -38,11 +38,14 @@ function App() {
       </Dialog>
     )
   }
-  function handleSubmit(formData) {
+  function handleLogin(formData) {
     console.log('login', formData)
   }
+  function handleRegister(formData) {
+    console.log('register', formData)
+  }
 
-  function LoginForm({submitHandler}) {
+  function LoginForm({submitHandler, buttonText}) {
     return (
       <div>
         <form
@@ -66,7 +69,7 @@ function App() {
             <input type="password" id="password"></input>
           </div>
           <div>
-            <input type="submit" value="Login"></input>
+            <input type="submit" value={buttonText}></input>
           </div>
         </form>
       </div>
@@ -79,10 +82,14 @@ function App() {
       <h1>Bookshelf</h1>
       <MyDialog name="login">
         <h3>Login</h3>
-        <LoginForm submitHandler={handleSubmit}></LoginForm>
+        <LoginForm submitHandler={handleLogin} buttonText="Login"></LoginForm>
       </MyDialog>
       <MyDialog name="register">
         <h3>Register</h3>
+        <LoginForm
+          submitHandler={handleRegister}
+          buttonText="Login"
+        ></LoginForm>
       </MyDialog>
 
       <div>
