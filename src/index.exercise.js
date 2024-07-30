@@ -59,11 +59,11 @@ function App() {
         >
           <div>
             <label htmlFor="username">Username</label>
-            <input type="text" name="username"></input>
+            <input type="text" id="username"></input>
           </div>
           <div>
             <label htmlFor="password">Password</label>
-            <input type="password" name="password"></input>
+            <input type="password" id="password"></input>
           </div>
           <div>
             <input type="submit" value="Login"></input>
