@@ -83,7 +83,7 @@ function App() {
         <h3>Register</h3>
         <CredentialsForm
           submitHandler={handleRegister}
-          buttonText="Login"
+          buttonText="Register"
         ></CredentialsForm>
       </BookshelfDialog>
 
