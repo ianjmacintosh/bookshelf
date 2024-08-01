@@ -1,20 +1,11 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
-// 🐨 let's get a solid reset of global styles so everything looks a bit better
-// In this project we're using bootstrap-reboot which you can import from
-// bootstrap/dist/css/bootstrap-reboot.css
 import 'bootstrap/dist/css/bootstrap-reboot.css'
-
-// 🦉 Note: you can definitely use regular styles to style React apps
-// and using any modern toolchain will allow you to simply import the CSS file
-// but CSS-in-JS is generally easier to maintain.
 import '@reach/dialog/styles.css'
 import * as React from 'react'
 import {createRoot} from 'react-dom/client'
-// 🐨 you'll need to import some new components that you'll be creating
-// in this file
-import {Button, Input, FormGroup} from './components/lib'
+import {Button, Input, FormGroup, Spinner} from './components/lib'
 import {Modal, ModalContents, ModalOpenButton} from './components/modal'
 import {Logo} from './components/logo'
 
@@ -31,7 +22,6 @@ function LoginForm({onSubmit, submitButton}) {
 
   return (
     <form
-      onSubmit={handleSubmit}
       css={{
         display: 'flex',
         flexDirection: 'column',
@@ -42,9 +32,8 @@ function LoginForm({onSubmit, submitButton}) {
           maxWidth: '300px',
         },
       }}
+      onSubmit={handleSubmit}
     >
-      {/* 🐨 these div elements could be a FormGroup you create in components/lib */}
-      {/* 🐨 and the inputs elements could be custom styled Input components too */}
       <FormGroup>
         <label htmlFor="username">Username</label>
         <Input id="username" />
@@ -53,7 +42,10 @@ function LoginForm({onSubmit, submitButton}) {
         <label htmlFor="password">Password</label>
         <Input id="password" type="password" />
       </FormGroup>
-      <div>{React.cloneElement(submitButton, {type: 'submit'})}</div>
+      <div>
+        {React.cloneElement(submitButton, {type: 'submit'})}
+        <Spinner></Spinner>
+      </div>
     </form>
   )
 }
@@ -103,7 +95,6 @@ function App() {
             <Button variant="secondary">Register</Button>
           </ModalOpenButton>
           <ModalContents aria-label="Registration form" title="Register">
-            <FormGroup></FormGroup>
             <LoginForm
               onSubmit={register}
               submitButton={<Button variant="secondary">Register</Button>}

@@ -1,45 +1,50 @@
 import styled from '@emotion/styled/macro'
-import * as mq from 'styles/media-queries'
-import * as color from 'styles/colors'
 import {Dialog as ReachDialog} from '@reach/dialog'
+import * as colors from 'styles/colors'
+import * as mq from 'styles/media-queries'
+import {FaSpinner} from 'react-icons/fa'
+import {keyframes} from '@emotion/core'
 
-const Button = styled.button(({variant}) => {
-  let variantStyles = {}
+const spin = keyframes`
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }`
 
-  if (variant === 'primary') {
-    variantStyles = {
-      background: color.indigo,
-      color: color.base,
-    }
-  } else if (variant === 'secondary') {
-    variantStyles = {
-      background: color.gray,
-      color: color.text,
-    }
-  }
+// animation: ${bounce} 1s ease infinite;
+const Spinner = styled(FaSpinner)({
+  animation: `${spin} 1s infinite linear`,
+})
 
-  const commonStyles = {
+Spinner.defaultProps = {
+  'aria-label': 'loading',
+}
+
+const buttonVariants = {
+  primary: {
+    background: colors.indigo,
+    color: colors.base,
+  },
+  secondary: {
+    background: colors.gray,
+    color: colors.text,
+  },
+}
+const Button = styled.button(
+  {
     padding: '10px 15px',
     border: '0',
     lineHeight: '1',
     borderRadius: '3px',
-  }
-
-  return {...commonStyles, ...variantStyles}
-})
+  },
+  ({variant = 'primary'}) => buttonVariants[variant],
+)
 
 const Input = styled.input({
-  // Input
   borderRadius: '3px',
-  border: `1px solid ${color.gray10}`,
-  background: color.gray,
+  border: `1px solid ${colors.gray10}`,
+  background: colors.gray,
   padding: '8px 12px',
 })
 
-const FormGroup = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-})
 const CircleButton = styled.button({
   borderRadius: '30px',
   padding: '0',
@@ -49,9 +54,9 @@ const CircleButton = styled.button({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'white',
-  color: color.text,
-  border: `1px solid ${color.gray10}`,
+  background: colors.base,
+  color: colors.text,
+  border: `1px solid ${colors.gray10}`,
   cursor: 'pointer',
 })
 
@@ -67,4 +72,9 @@ const Dialog = styled(ReachDialog)({
   },
 })
 
-export {Button, Input, FormGroup, CircleButton, Dialog}
+const FormGroup = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+export {Button, Input, CircleButton, Dialog, FormGroup, Spinner}
