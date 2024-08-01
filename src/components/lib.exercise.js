@@ -1,4 +1,6 @@
 import styled from '@emotion/styled/macro'
+import * as mq from 'styles/media-queries'
+import * as color from 'styles/colors'
 import {Dialog as ReachDialog} from '@reach/dialog'
 
 const Button = styled.button(({variant}) => {
@@ -6,13 +8,13 @@ const Button = styled.button(({variant}) => {
 
   if (variant === 'primary') {
     variantStyles = {
-      background: '#3f51b5',
-      color: 'white',
+      background: color.indigo,
+      color: color.base,
     }
   } else if (variant === 'secondary') {
     variantStyles = {
-      background: '#f1f2f7',
-      color: '#434449',
+      background: color.gray,
+      color: color.text,
     }
   }
 
@@ -29,8 +31,8 @@ const Button = styled.button(({variant}) => {
 const Input = styled.input({
   // Input
   borderRadius: '3px',
-  border: '1px solid #f1f1f4',
-  background: '#f1f2f7',
+  border: `1px solid ${color.gray10}`,
+  background: color.gray,
   padding: '8px 12px',
 })
 
@@ -48,8 +50,8 @@ const CircleButton = styled.button({
   alignItems: 'center',
   justifyContent: 'center',
   background: 'white',
-  color: '#434449',
-  border: `1px solid #f1f1f4`,
+  color: color.text,
+  border: `1px solid ${color.gray10}`,
   cursor: 'pointer',
 })
 
@@ -59,7 +61,7 @@ const Dialog = styled(ReachDialog)({
   paddingBottom: '3.5em',
   boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.2)',
   margin: '20vh auto',
-  '@media (max-width: 991px)': {
+  [mq.small]: {
     width: '100%',
     margin: '10vh auto',
   },
