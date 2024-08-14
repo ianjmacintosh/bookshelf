@@ -3,12 +3,12 @@ import {jsx} from '@emotion/core'
 
 import * as React from 'react'
 import * as auth from 'auth-provider'
+import {FullPageSpinner} from './components/lib'
+import * as colors from './styles/colors'
 import {client} from './utils/api-client'
-import {useAsync} from 'utils/hooks'
+import {useAsync} from './utils/hooks'
 import {AuthenticatedApp} from './authenticated-app'
 import {UnauthenticatedApp} from './unauthenticated-app'
-import {FullPageSpinner} from 'components/lib'
-import * as colors from './styles/colors'
 
 async function getUser() {
   let user = null
@@ -26,28 +26,30 @@ function App() {
   const {
     data: user,
     error,
-    isIdle,
     isLoading,
-    isSuccess,
+    isIdle,
     isError,
+    isSuccess,
     run,
-    setData: setUser,
+    setData,
   } = useAsync()
 
   React.useEffect(() => {
-    getUser().then(u => setUser(u))
-  }, [])
+    run(getUser())
+  }, [run])
 
-  const login = form => auth.login(form).then(u => setUser(u))
-  const register = form => auth.register(form).then(u => setUser(u))
+  const login = form => auth.login(form).then(user => setData(user))
+  const register = form => auth.register(form).then(user => setData(user))
   const logout = () => {
     auth.logout()
-    setUser(null)
+    setData(null)
   }
 
   if (isLoading || isIdle) {
-    return <FullPageSpinner></FullPageSpinner>
-  } else if (isError) {
+    return <FullPageSpinner />
+  }
+
+  if (isError) {
     return (
       <div
         css={{
@@ -63,7 +65,9 @@ function App() {
         <pre>{error.message}</pre>
       </div>
     )
-  } else {
+  }
+
+  if (isSuccess) {
     return user ? (
       <AuthenticatedApp user={user} logout={logout} />
     ) : (

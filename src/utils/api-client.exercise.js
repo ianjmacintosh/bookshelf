@@ -1,3 +1,4 @@
+import * as auth from 'auth-provider'
 const apiURL = process.env.REACT_APP_API_URL
 
 function client(
@@ -17,6 +18,10 @@ function client(
     if (response.ok) {
       return data
     } else {
+      if (response.status === '401') {
+        await auth.logout()
+        window.location = window.location.href
+      }
       return Promise.reject(data)
     }
   })
