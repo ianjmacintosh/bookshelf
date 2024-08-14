@@ -5,7 +5,8 @@ function client(
   endpoint,
   {token, headers: customHeaders, ...customConfig} = {},
 ) {
-  const config = {
+  let config = {
+    method: 'GET',
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
       ...customHeaders,
@@ -13,15 +14,25 @@ function client(
     ...customConfig,
   }
 
+  if (customConfig.data) {
+    config = {
+      ...config,
+      headers: {...config.headers, method: 'POST'},
+      body: JSON.stringify(customConfig.data),
+    }
+  }
+
   return window.fetch(`${apiURL}/${endpoint}`, config).then(async response => {
+    if (response.status === 401) {
+      await auth.logout()
+      // refresh the page for them
+      window.location.assign(window.location)
+      return Promise.reject({message: 'Please re-authenticate.'})
+    }
     const data = await response.json()
     if (response.ok) {
       return data
     } else {
-      if (response.status === '401') {
-        await auth.logout()
-        window.location = window.location.href
-      }
       return Promise.reject(data)
     }
   })
