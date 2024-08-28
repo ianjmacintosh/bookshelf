@@ -77,10 +77,12 @@ function StatusButtons({user, book}) {
   //   you can pass as data.
   const [update] = useMutation(
     data =>
-      client(`list-items/${listItem}`, {
+      client(`list-items/${listItem.id}`, {
         token: user.token,
         method: 'PUT',
-        ...data,
+        data: {
+          ...data,
+        },
       }),
     {onSettled: () => queryCache.invalidateQueries('list-items')},
   )
@@ -119,14 +121,12 @@ function StatusButtons({user, book}) {
             // 🐨 add an onClick here that calls update with the data we want to update
             // 💰 to mark a list item as unread, set the finishDate to null
             // {id: listItem.id, finishDate: null}
-            onClick={() => {
-              update({id: listItem.id, finishDate: null})
-            }}
+            onClick={() => update({id: listItem.id, finishDate: null})}
             icon={<FaBook />}
           />
         ) : (
           <TooltipButton
-            label="Mark as read"
+            label={`Mark as read`}
             highlight={colors.green}
             // 🐨 add an onClick here that calls update with the data we want to update
             // 💰 to mark a list item as read, set the finishDate
