@@ -10,12 +10,15 @@ import {
   FaTimesCircle,
 } from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
-import {useMutation, queryCache} from 'react-query'
-import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
 import * as colors from 'styles/colors'
 import {CircleButton, Spinner} from './lib'
-import {useListItem, useUpdateListItem} from 'utils/list-items'
+import {
+  useCreateListItem,
+  useDeleteListItem,
+  useListItem,
+  useUpdateListItem,
+} from 'utils/list-items'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -53,15 +56,9 @@ function StatusButtons({user, book}) {
 
   const [update] = useUpdateListItem(user)
 
-  const [remove] = useMutation(
-    ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
-    {onSettled: () => queryCache.invalidateQueries('list-items')},
-  )
+  const [remove] = useDeleteListItem(user)
 
-  const [create] = useMutation(
-    ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
-    {onSettled: () => queryCache.invalidateQueries('list-items')},
-  )
+  const [create] = useCreateListItem(user)
 
   return (
     <React.Fragment>

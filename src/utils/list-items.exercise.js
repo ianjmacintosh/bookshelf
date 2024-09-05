@@ -29,4 +29,24 @@ const useUpdateListItem = user => {
   )
 }
 
-export {useListItems, useListItem, useUpdateListItem}
+const useDeleteListItem = user => {
+  return useMutation(
+    ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
+}
+
+const useCreateListItem = user => {
+  return useMutation(
+    ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
+}
+
+export {
+  useListItems,
+  useListItem,
+  useUpdateListItem,
+  useDeleteListItem,
+  useCreateListItem,
+}
