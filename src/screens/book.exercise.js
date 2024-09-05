@@ -15,6 +15,7 @@ import {Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
 import bookPlaceholderSvg from 'assets/book-placeholder.svg'
+import {useBook} from 'utils/books'
 
 const loadingBook = {
   title: 'Loading...',
@@ -27,11 +28,7 @@ const loadingBook = {
 
 function BookScreen({user}) {
   const {bookId} = useParams()
-  const {data: book = loadingBook} = useQuery({
-    queryKey: ['book', {bookId}],
-    queryFn: () =>
-      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
-  })
+  const book = useBook(bookId, user)
 
   const {data: listItems} = useQuery({
     queryKey: 'list-items',
@@ -131,9 +128,10 @@ function NotesTextarea({listItem, user}) {
       }),
     {onSettled: () => queryCache.invalidateQueries('list-items')},
   )
-  const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
-    mutate,
-  ])
+  const debouncedMutate = React.useMemo(
+    () => debounceFn(mutate, {wait: 300}),
+    [mutate],
+  )
 
   function handleNotesChange(e) {
     debouncedMutate({id: listItem.id, notes: e.target.value})
