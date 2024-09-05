@@ -8,7 +8,12 @@ const useListItems = user => {
       client(`list-items`, {token: user.token}).then(data => data.listItems),
   })
 
-  return result.data ?? null
+  return result.data ?? []
 }
 
-export {useListItems}
+const useListItem = (bookId, user) => {
+  const listItem = useListItems(user).find(li => li.bookId === bookId) ?? null
+  return listItem
+}
+
+export {useListItems, useListItem}
