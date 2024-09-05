@@ -1,5 +1,6 @@
 import {useQuery} from 'react-query'
 import {client} from './api-client'
+import {useMutation, queryCache} from 'react-query'
 
 const useListItems = user => {
   const result = useQuery({
@@ -16,4 +17,16 @@ const useListItem = (bookId, user) => {
   return listItem
 }
 
-export {useListItems, useListItem}
+const useUpdateListItem = user => {
+  return useMutation(
+    updates =>
+      client(`list-items/${updates.id}`, {
+        method: 'PUT',
+        data: updates,
+        token: user.token,
+      }),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
+}
+
+export {useListItems, useListItem, useUpdateListItem}
