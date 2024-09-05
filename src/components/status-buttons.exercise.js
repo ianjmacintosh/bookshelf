@@ -15,6 +15,7 @@ import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
 import * as colors from 'styles/colors'
 import {CircleButton, Spinner} from './lib'
+import {useListItems} from 'utils/list-items.exercise'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -48,11 +49,7 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
 }
 
 function StatusButtons({user, book}) {
-  const {data: listItems} = useQuery({
-    queryKey: 'list-items',
-    queryFn: () =>
-      client(`list-items`, {token: user.token}).then(data => data.listItems),
-  })
+  const listItems = useListItems(user)
   const listItem = listItems?.find(li => li.bookId === book.id) ?? null
 
   const [update] = useMutation(
