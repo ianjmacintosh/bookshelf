@@ -35,7 +35,32 @@ function useUpdateListItem(user, options) {
         data: updates,
         token: user.token,
       }),
-    {...defaultMutationOptions, ...options},
+    {
+      onMutate(updates) {
+        const oldListItemData = queryCache.getQueryData(`list-items`)
+
+        const newListItemData = oldListItemData.map(item => {
+          if (item.id === updates.id) {
+            return {...item, ...updates}
+          } else {
+            return item
+          }
+        })
+
+        console.dir(newListItemData)
+        queryCache.setQueryData('list-items', newListItemData)
+
+        // queryCache.setQueryData('list-items')
+
+        return oldListItemData
+      },
+      onSuccess(onMutateValue) {
+        console.log('Success!')
+        console.log(onMutateValue)
+      },
+      ...defaultMutationOptions,
+      ...options,
+    },
   )
 }
 
