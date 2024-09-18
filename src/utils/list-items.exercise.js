@@ -47,16 +47,16 @@ function useUpdateListItem(user, options) {
           }
         })
 
-        console.dir(newListItemData)
         queryCache.setQueryData('list-items', newListItemData)
 
-        // queryCache.setQueryData('list-items')
-
-        return oldListItemData
+        return () => {
+          queryCache.setQueryData('list-items', oldListItemData)
+        }
       },
-      onSuccess(onMutateValue) {
-        console.log('Success!')
-        console.log(onMutateValue)
+      onError(error, variables, callback) {
+        if (typeof callback === 'function') {
+          callback()
+        }
       },
       ...defaultMutationOptions,
       ...options,
