@@ -78,4 +78,4 @@ function setQueryDataForBook(book) {
   queryCache.setQueryData(['book', {bookId: book.id}], book, bookQueryConfig)
 }
 
-export {useBook, useBookSearch, refetchBookSearchQuery, setQueryDataForBook}
+export {useBook, useBookSearch, useRefetchBookSearchQuery, setQueryDataForBook}
