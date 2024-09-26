@@ -1,34 +1,29 @@
+/** @jsx jsx */
+import {jsx} from '@emotion/core'
+
 import * as React from 'react'
 import {queryCache} from 'react-query'
 import * as auth from 'auth-provider'
 import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
-import {FullPageSpinner} from 'components/lib'
-import * as colors from 'styles/colors'
+import {FullPageSpinner, FullPageErrorFallback} from 'components/lib'
 
-const AuthContext = React.createContext()
+async function getUser() {
+  let user = null
 
-function useAuth() {
-  const context = React.useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error(`useAuth must be used within a AuthContext provider`)
+  const token = await auth.getToken()
+  if (token) {
+    const data = await client('me', {token})
+    user = data.user
   }
-  return context
+
+  return user
 }
 
-function AuthProvider({children}) {
-  async function getUser() {
-    let user = null
+const AuthContext = React.createContext()
+AuthContext.displayName = 'AuthContext'
 
-    const token = await auth.getToken()
-    if (token) {
-      const data = await client('me', {token})
-      user = data.user
-    }
-
-    return user
-  }
-
+function AuthProvider(props) {
   const {
     data: user,
     error,
@@ -38,6 +33,7 @@ function AuthProvider({children}) {
     isSuccess,
     run,
     setData,
+    status,
   } = useAsync()
 
   React.useEffect(() => {
@@ -57,27 +53,23 @@ function AuthProvider({children}) {
   }
 
   if (isError) {
-    return (
-      <div
-        css={{
-          color: colors.danger,
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <p>Uh oh... There's a problem. Try refreshing the app.</p>
-        <pre>{error.message}</pre>
-      </div>
-    )
+    return <FullPageErrorFallback error={error} />
   }
 
   if (isSuccess) {
-    const props = {user, login, register, logout}
-    return <AuthContext.Provider value={props}>{children}</AuthContext.Provider>
+    const value = {user, login, register, logout}
+    return <AuthContext.Provider value={value} {...props} />
   }
+
+  throw new Error(`Unhandled status: ${status}`)
+}
+
+function useAuth() {
+  const context = React.useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error(`useAuth must be used within a AuthProvider`)
+  }
+  return context
 }
 
 export {AuthProvider, useAuth}
