@@ -1,6 +1,9 @@
 // 🐨 you're going to need the Dialog component
 // It's just a light wrapper around ReachUI Dialog
 // 📜 https://reacttraining.com/reach-ui/dialog/
+/** @jsx jsx */
+import {jsx} from '@emotion/core'
+
 import {Dialog} from './lib'
 import React from 'react'
 
@@ -52,7 +55,11 @@ const ModalDismissButton = ({children}) => {
       setIsOpen(!isOpen)
     },
   })
-  return <>{clonedElement}</>
+  return (
+    <div css={{display: 'flex', justifyContent: 'flex-end'}}>
+      {clonedElement}
+    </div>
+  )
 }
 
 // 🐨 create a ModalOpenButton component which is effectively the same thing as
